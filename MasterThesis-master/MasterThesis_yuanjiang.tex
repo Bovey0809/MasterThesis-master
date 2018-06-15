@@ -70,25 +70,17 @@ At last, I want to pay appreciation to my fellows, all the students in the lab. 
 
 
 \section{Background}
+\subsection{Homograph}
+\subsection{3D Reprojection}
 
-\begin{figure}[t]
-  \centering
-  % Requires \usepackage{graphicx}
-  \includegraphics[width=15cm]{object_boundary_vs_local_edge.png}\\
-  \caption{Object-level boundary detection is different from the traditional local edge detection, where the former mainly focuses on detecting the high-level semantic boundaries. The first image contains the annotations, which are marked with red lines, for object-level boundary detection.}\label{object_boundary_vs_local_edge}
-\end{figure}
 % 
-Gaze estimation is a traditional area in computer vision and computer interaction. Since long time ago, finding the gaze direction is the object in medical and facial analyze projects. In the ancient times, such kind of technologies are based on heavy equipment, including electro-occulography and coil embed lens. When it comes to video eye gaze studying, the first one is concerned with airplane pilot, mainly for flight control systems in 1940s\cite{mohamed2007history}.
+Gaze estimation is a traditional area in computer vision and computer interaction. Since long time ago, finding the gaze direction is the object in medical and facial analyze projects. In the ancient times, such kind of technologies are based on heavy equipment, including electro-occulography and coil embed lens. When it comes to video eye gaze studying\cite{mohamed2007history}, the first one is concerned with airplane pilot, mainly for flight control systems in 1940s. After that the technology develops toward head mounted trackers, and in 1970s, in order to improve accuracy and reducing limitations 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
 \section{Application Scenes}
-
 \subsection{Special Device to Check Pupil}
-
 \subsection{Car Industry Detect Eye Movement}
-
 \subsection{Play Station}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -100,46 +92,30 @@ Gaze estimation is a traditional area in computer vision and computer interactio
 \chapter{Related Work} \label{related_work}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Chapter 3
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 
 \section{Traditional gaze estimation}
-\subsection{Homograph}
-\subsection{3D Re-projection}
-\subsection{Deep learning based methods}
-
-\section{Object Boundary Detection in Natural Images}
+\section{Deep learning based methods}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-\chapter{Purpose} \label{methodology}
+\chapter{Methodology} \label{methodology}
 
 \section{Original Pipeline}
 \subsection{Traditional Pipeline Algorithm}
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Network Structure} \label{network structure}
+
 \section{Training Phase} \label{training phase}
-\subsection{Formulation of the Multi-recursive-input}
-
-
+\subsection{Formulation of the input}
 \subsection{Loss Function}
 
 
 
 \section{Testing Phase} \label{testing phase}
 
-
 \section{Model Interpretation} \label{interpretation}
-\subsection{Cascaded Architecture \emph{vs.} Single-stage Architecture}
-
-\subsection{Multi-recursive-input \emph{vs.} Single-recursive-input}
-
-
 \subsection{End-to-end Training \emph{vs.} Stepwise Self-tuning}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -148,31 +124,20 @@ Gaze estimation is a traditional area in computer vision and computer interactio
 \chapter{Experiments} \label{experiments}
 
 
-\section{Neuronal Boundary Detection in EM Images}
+\section{Images in MPII}
 
 
 
 \subsection{Evaluation Metric}
 
-\subsection{Mouse Piriform Cortex Dataset}\label{experiment of piriform}
-
-
-\subsection{ISBI 2012 EM Segmentation Dataset}
-
-
-\section{Object Boundary Detection in Natural Images}
+\section{Datasets}
 \subsection{Metrics}
 \subsection{PASCAL VOC Contour Dataset}
 
 \section{Control Experiments for Model Interpretation}3
-
 \subsection{Evaluations on Cascaded Architecture \emph{vs.} Single-stage Architecture}
-
 \subsection{Evaluations on Multi-recursive-input vs. Single-recursive-input}
-
 \subsection{Evaluations on End-to-end Training vs. Stepwise Self-tuning}
-
-
 \bibliographystyle{IEEEtran}
 \bibliography{LUOreference}
 \end{document}
