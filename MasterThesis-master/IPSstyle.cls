@@ -91,7 +91,7 @@
         {\large \BYUField@Advisor, \BYUField@AdvisorTitle}\\
 
         \vfill
-        {\large Neurocomputing System\\
+        {\large Community Computing\\
         Information Architecture\\
         The Graduate School of Information, Production and Systems\\[\baselineskip]
         \mbox{\BYUField@Month~\BYUField@Year} \\[\baselineskip]
