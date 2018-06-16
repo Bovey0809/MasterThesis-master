@@ -102,9 +102,19 @@ It is practical to be applied in image registration, image correction and image 
 It is performed normally be a matrix multiplication by the homogeneous equation.
 \[\begin{bmatrix} x'\\ y'\\ w' \end{bmatrix} = \begin{bmatrix} h_1 & h_2 & h_3\\ h_4 & h_5&h_6 \\ h_7 & h_8 & h_9 \end{bmatrix} \begin{bmatrix} x\\ y\\ w \end{bmatrix} \text{or } \bold{x'= Hx}\]
 
-There are three kinds of algorithm for homograph, one is DLT(Direct Linear Transformation), second is Affine transformation, image distortion.
-The different in such 
+There are three kinds of algorithms for homograph, one is DLT(Direct Linear Transformation), second is Affine transformation, image distortion.
+The different in such algorithms is about degree of freedom. 
 
+\begin{figure}
+    \centering
+    \includegraphics[width=15cm]{MasterThesis-master/homography_example.jpg}
+    \caption{point (x1,y1) on the book on the left image is corresponded to point (x2, y2) in right one. the formulation can be calculated as 
+    $x' = \begin{bmatrix} A & t \\ 0 & 1 \end{bmatrix} x$, $x'= \begin{bmatrix} x1 & y1 & w' \end{bmatrix}^{T}$, $x= \begin{bmatrix} x2 & y2 & w \end{bmatrix}^{T}$}
+    \label{fig:homography example}
+\end{figure}
+
+As Fig. \ref{fig:homography example} shows the homography matrix is the key to match correspondent points in both pictures.
+Usually traditional algorithm try to find out the matrix by using SVD\cite{essig2010fully}.
 
 
 \subsection{3D Reprojection}
