@@ -66,17 +66,46 @@ At last, I want to pay appreciation to my fellows, all the students in the lab. 
  \setlength{\baselineskip}{23.0pt}
 
 \chapter{Introduction} \label{introduction}
-
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Chapter Introduction
 \section{Background}
 
-
-% 
-Gaze estimation is a traditional area in computer vision and computer interaction. Since long time ago, finding the gaze direction is the object in medical and facial analyze projects. In the ancient times, such kind of technologies are based on heavy equipment, including electro-occulography and coil embed lens. When it comes to video eye gaze studying\cite{mohamed2007history}, the first one is concerned with airplane pilot, mainly for flight control systems in 1940s. After that the technology develops toward head mounted trackers, and in 1970s, in order to improve accuracy and reducing limitations. As the hardware had developed so fast, in 1980s, it is the first time when real-time eye gaze estimation can take place. But it is only constrained to medical and cognitive researches\cite{borji2013state}. The situation changed after 2000, researchers pay more attention to computer interaction applications. Like the broadly used desktop computers and televisions, it happened in playing station, video analyzing and commercial web studying.
+Gaze estimation is a traditional area in computer vision and computer interaction. 
+Since long time ago, finding the gaze direction is the object in medical and facial analyze projects. 
+In the ancient times, such kind of technologies are based on heavy equipment, including electro-occulography and coil embed lens. 
+When it comes to video eye gaze studying\cite{mohamed2007history}, the first one is concerned with airplane pilot, mainly for flight control systems in 1940s. 
+After that the technology develops toward head mounted trackers, and in 1970s, in order to improve accuracy and reducing limitations. 
+As the hardware had developed so fast, in 1980s, it is the first time when real-time eye gaze estimation can take place. 
+But it is only constrained to medical and cognitive researches\cite{borji2013state}. 
+The situation changed after 2000, researchers pay more attention to computer interaction applications.
+Like the broadly used desktop computers and televisions, it happened in playing station, video analyzing and commercial web studying.
 Although such area gained a lot of achievements, it is still a hot topic. The equipment used in such areas is becoming more handle and cheaper, we are still looking for some method to get rid of devices.
 
+The main structure to predict eye gaze direction is using a step-by-step pipeline structure. 
+In order to find out the transformation matrix from real world coordination to image coordination.
+The first step is calculating homograph transformation matrix, and then use camera calibration model to extract features used for RANSAC algorithm.
+From the pipeline the points in gaze direction in real world of a three dimensional vector can be transformed to two dimensional line in the image.
+
+Convolutional networks begin in 2012 showed its power of understanding images. 
+New structures in deep learning area with convolutional networks can detect object and recognize object.
+Especially in complex problems, convolutional neural network can extract features in the image and then establish relationship with target labels by training with large amount of data.
+This Idea have taken a impact in computer vision studies.
+Researchers need to make their data and label them to feed into networks.
+By the power of transfer learning, even unrelated networks studies trained by total different data can have a common sense of object recognition.
+
+
 \subsection{Homograph}
+%单应性变换
+In order to reflect same object in one image's points into the other one. 
+Homograph transformation should be used.
+The reflection can be one image or one surface in the three dimensional coordinate.
+It is practical to be applied in image registration, image correction and image texture distortion.
+It is performed normally be a matrix multiplication by the homogeneous equation.
+\[\begin{bmatrix} x'\\ y'\\ w' \end{bmatrix} = \begin{bmatrix} h_1 & h_2 & h_3\\ h_4 & h_5&h_6 \\ h_7 & h_8 & h_9 \end{bmatrix} \begin{bmatrix} x\\ y\\ w \end{bmatrix} \text{or } \bold{x'= Hx}\]
+
+There are three kinds of algorithm for homograph, one is DLT(Direct Linear Transformation), second is Affine transformation, image distortion.
+The different in such 
+
+
 
 \subsection{3D Reprojection}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -91,7 +120,7 @@ Although such area gained a lot of achievements, it is still a hot topic. The eq
 
 \section{Organization of the thesis}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Chapter 3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Chapter Related work
 \chapter{Related Work} \label{related_work}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Chapter 3
 
