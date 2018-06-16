@@ -70,12 +70,15 @@ At last, I want to pay appreciation to my fellows, all the students in the lab. 
 
 
 \section{Background}
-\subsection{Homograph}
-\subsection{3D Reprojection}
+
 
 % 
-Gaze estimation is a traditional area in computer vision and computer interaction. Since long time ago, finding the gaze direction is the object in medical and facial analyze projects. In the ancient times, such kind of technologies are based on heavy equipment, including electro-occulography and coil embed lens. When it comes to video eye gaze studying\cite{mohamed2007history}, the first one is concerned with airplane pilot, mainly for flight control systems in 1940s. After that the technology develops toward head mounted trackers, and in 1970s, in order to improve accuracy and reducing limitations 
+Gaze estimation is a traditional area in computer vision and computer interaction. Since long time ago, finding the gaze direction is the object in medical and facial analyze projects. In the ancient times, such kind of technologies are based on heavy equipment, including electro-occulography and coil embed lens. When it comes to video eye gaze studying\cite{mohamed2007history}, the first one is concerned with airplane pilot, mainly for flight control systems in 1940s. After that the technology develops toward head mounted trackers, and in 1970s, in order to improve accuracy and reducing limitations. As the hardware had developed so fast, in 1980s, it is the first time when real-time eye gaze estimation can take place. But it is only constrained to medical and cognitive researches\cite{borji2013state}. The situation changed after 2000, researchers pay more attention to computer interaction applications. Like the broadly used desktop computers and televisions, it happened in playing station, video analyzing and commercial web studying.
+Although such area gained a lot of achievements, it is still a hot topic. The equipment used in such areas is becoming more handle and cheaper, we are still looking for some method to get rid of devices.
 
+\subsection{Homograph}
+
+\subsection{3D Reprojection}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Application Scenes}
@@ -95,49 +98,40 @@ Gaze estimation is a traditional area in computer vision and computer interactio
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Traditional gaze estimation}
+\subsection{Original Pipeline Algorithm}
 \section{Deep learning based methods}
+\subsection{Gaze Estimation in the Wild}
+\subsection{Eye Tracking for Everyone}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \chapter{Methodology} \label{methodology}
-
-\section{Original Pipeline}
-\subsection{Traditional Pipeline Algorithm}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Network Structure} \label{network structure}
+\subsection{Pre-trained Model}
+\subsection{Transfer Learning}
+\subsection{Attention Model}
 
 \section{Training Phase} \label{training phase}
 \subsection{Formulation of the input}
+\subsection{Data Augment}
 \subsection{Loss Function}
 
 
-
 \section{Testing Phase} \label{testing phase}
-
-\section{Model Interpretation} \label{interpretation}
-\subsection{End-to-end Training \emph{vs.} Stepwise Self-tuning}
+\subsection{One Person Output}
+\subsection{Different Person Output}
+\subsection{Points Based Structure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 \chapter{Experiments} \label{experiments}
-
-
 \section{Images in MPII}
+\subsection{Sources}
+\subsection{Methods to Record}
+\section{Datasets Structure}
+\section{Results Display}
 
 
-
-\subsection{Evaluation Metric}
-
-\section{Datasets}
-\subsection{Metrics}
-\subsection{PASCAL VOC Contour Dataset}
-
-\section{Control Experiments for Model Interpretation}3
-\subsection{Evaluations on Cascaded Architecture \emph{vs.} Single-stage Architecture}
-\subsection{Evaluations on Multi-recursive-input vs. Single-recursive-input}
-\subsection{Evaluations on End-to-end Training vs. Stepwise Self-tuning}
 \bibliographystyle{IEEEtran}
 \bibliography{LUOreference}
 \end{document}
