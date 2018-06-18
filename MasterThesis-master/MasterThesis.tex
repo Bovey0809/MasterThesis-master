@@ -105,7 +105,7 @@ It is performed normally be a matrix multiplication by the homogeneous equation.
 There are three kinds of algorithms for homograph, one is DLT(Direct Linear Transformation), second is Affine transformation, image distortion.
 The different in such algorithms is about degree of freedom. 
 
-\begin{figure}[b]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=15cm]{MasterThesis-master/images/homography_example.jpg}
     \caption{Point (x1,y1) on the book on the left image is corresponded to point (x2, y2) in right one.}
@@ -127,7 +127,7 @@ It mainly discard the noise points in the data.
 It is iterable, which means it can find out pattern between images and output the most suitable H homograph matrix.
 Fig.\ref{fig:RANSAC} shows an example for RANSAC to find the linear pattern in all the data.
 
-\begin{figure}[hb]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=15cm]{MasterThesis-master/images/RANSAC.png}
     \caption{Black points and blue cross points are the raw data, RANSAC tried to recognize noise in the data, and fit the rest correct data set with linear function line in green, and the ground truth line is showed in red.}
@@ -137,20 +137,22 @@ Fig.\ref{fig:RANSAC} shows an example for RANSAC to find the linear pattern in a
 
 \subsection{Camera Calibration}
 Camera calibration is also called as pinhole camera model.
-\begin{figure}[b]
+\begin{figure}[H]
     \centering
-    \includegraphics{MasterThesis-master/images/Pinhole-camera.png}
+    \includegraphics{MasterThesis-master/images/calibration_cameramodel_coords.png}
     \caption{Pinhole model from real world to images taken in camera.}
     \label{fig:pinhole_model}
 \end{figure}
 For most applications, pinhole camera model\ref{fig:pinhole_model} is accurate enough to mimic camera construction coordinate.
 Usually, the relationship between points in real world and points in images can be described as formulation.$\lambda x = PX$ Fig.\ref{fig:pinhole_model_coordinate}.
-\begin{figure}
+
+\begin{figure}[h!]
     \centering
-    \includegraphics[width=15cm]{MasterThesis-master/images/Pinhole.png}
+    \includegraphics[width=10cm]{MasterThesis-master/images/Pinhole.png}
     \caption{Pinhole model.}
     \label{fig:pinhole_model_coordinate}
 \end{figure}
+
 X is the point in the real world, which is a 4 dimensional vector as $X = \begin{bmatrix} X & Y & Z & w \end{bmatrix}$.
 x is the point in image, which is a point in the image, could be written as $x = \begin{bmatrix} x & y & w \end{bmatrix}$.
 P is the camera calibration matrix, 
@@ -165,20 +167,62 @@ t is the translation matrix shows the distance moved in the camera center.
 \end{equation}
 In equation \ref{eq:K}, distance between image plane and camera center is f.
 s is the tilting parameter, usually it is set to 0.
-
-
+With equation \ref{eq:K}, points in the image can be rotate within the stable connection of the real world's object.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Application Scenes}
-\subsection{Special Device to Check Pupil}
-\subsection{Car Industry Detect Eye Movement}
-\subsection{Play Station}
+The eye gaze can be implemented in a lot of platforms.
+
+\subsection{Computer Communication}
+Using gaze as the fast object selection method to replace the mouse.\cite{Sibert:2000:EEG:332040.332445}
+An application called MAGIC is used as the controller to trace pupil.\cite{Zhai:1999:MGI:302979.303053}
+Both applications are developed by analyze the gaze data to figure out focusing point on the screen.
+As shown in Fig.\ref{fig:eye_tracker}
+\begin{figure}
+    \centering
+    \includegraphics[width=9cm]{MasterThesis-master/images/eye_tracker.png}
+    \caption{Video-based head mounted eye tracker}
+    \label{fig:eye_tracker}
+\end{figure}
+
+\subsection{Display Panel Applications}
+Long distance of eye gaze detection is also one important application.
+As shown in Fig.\ref{fig:car_industry}
+The techniques called corneal reflection is used to track gaze on large displays and smart TVs.
+Combined with Adaboost and Shift algorithm, a robust pupil detection method is used to detect gaze.\cite{gwon2013robust}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=9cm]{MasterThesis-master/images/car_industry.jpg}
+    \caption{Car industry use to detect eye movement to keep driver safe.}
+    \label{fig:car_industry}
+\end{figure}
+
+\subsection{Head-mounted setups}
+With portable platforms devices, interactions can be used in VR, gaming controls, and AR.
+As shown in Fig.\ref{fig:play_station}
+Such 3D model mainly based on human head 3D models.
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.4]{MasterThesis-master/images/play_station.jpg}
+    \caption{Play station use the gaze to make players more immersed in the enviorment.}
+    \label{fig:play_station}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \section{Organization of the thesis}
+The rest of the thesis is structured as follow.
+Chapter 2 will introduce related papers using convolution networks to detect gaze directions.
+Include the papers shortages and advantages.
+Besides that, the different structures in both traditional pipeline algorithm and end-to-end algorithms are explained in details.
+In chapter 3 we describe our methodology used in the thesis.
+From data collection to data cleaning.
+And then the network structure we used in the thesis.
+In chapter 4 we showed out the data structure and mainly detailed in training the network.
+Finally, we compare our results with the others.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Chapter Related work
 \chapter{Related Work} \label{related_work}
@@ -220,6 +264,7 @@ s is the tilting parameter, usually it is set to 0.
 \section{Datasets Structure}
 \section{Results Display}
 
+\chapter{Future Work}\label{future work}
 
 \bibliographystyle{IEEEtran}
 \bibliography{LUOreference}
