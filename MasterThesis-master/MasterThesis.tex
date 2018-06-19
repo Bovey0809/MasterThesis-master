@@ -30,6 +30,8 @@
 \usepackage{listings}
 \usepackage{algorithm,algorithmicx,algpseudocode}
 \usepackage[toc,page,title,titletoc,header]{appendix}
+\usepackage{smartdiagram}
+\usepackage{tabularx}
 
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
@@ -100,7 +102,7 @@ Homograph transformation should be used.
 The reflection can be one image or one surface in the three dimensional coordinate.
 It is practical to be applied in image registration, image correction and image texture distortion.
 It is performed normally be a matrix multiplication by the homogeneous equation.
-\[\begin{bmatrix} x'\\ y'\\ w' \end{bmatrix} = \begin{bmatrix} h_1 & h_2 & h_3\\ h_4 & h_5&h_6 \\ h_7 & h_8 & h_9 \end{bmatrix} \begin{bmatrix} x\\ y\\ w \end{bmatrix} \text{or } \bold{x'= Hx}\]
+\[\begin{bmatrix} x'\\ y'\\ w' \end{bmatrix} = \begin{bmatrix} h_1 & h_2 & h_3\\ h_4 & h_5&h_6 \\ h_7 & h_8 & h_9 \end{bmatrix} \begin{bmatrix} x\\ y\\ w \end{bmatrix} \text{or } \mathbf{x'= Hx}\]
 
 There are three kinds of algorithms for homograph, one is DLT(Direct Linear Transformation), second is Affine transformation, image distortion.
 The different in such algorithms is about degree of freedom. 
@@ -227,12 +229,96 @@ Finally, we compare our results with the others.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Chapter Related work
 \chapter{Related Work} \label{related_work}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Chapter 3
+The gaze estimation methods are mainly separated into two directions.
+One is using pipeline structure as equation\ref{eq:1} and then equation \ref{eq:K}.
+Equation \ref{eq:1} used to build transformation matrix between every images of the same person.
+Equation \ref{eq:K} used to build transformation matrix between real world 3D points with images.
+The steps can be described as below.
+\begin{center}
+    \smartdiagramset{back arrow disabled=true}
+    \smartdiagram[flow diagram:horizontal]{Head Trackers, Equation \ref{eq:1}, Physical 3D Model, Equation\ref{eq:K}, Angles}
+\end{center}
 
+The second one is aiming to build one end-to-end algorithm.
+Directly extract gaze direction from images.
+Thus the process is different from pipeline model.
+Based on training and learning processes.
+Convolutional neural networks are good at looking for features by itself.
+As the result, the neural networks end-to-end system can be described as below.
+\begin{center}
+    \smartdiagram[flow diagram:horizontal]{Images, CNN Network, output angles}
+\end{center}
+
+The training process is a circle.
+Every image put inside the system will generate a label.
+The label here is the angle of gaze direction.
+Compare the label with the ground truth to optimize networks' weights.
+After long time running we can get a suitable network.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Traditional gaze estimation}
-\subsection{Original Pipeline Algorithm}
+Because the lack of computer power, the traditional way is more focus on the mechanism of different filters.
+In computer vision area, we choose features by designing a fixed weights filter.
+The filter is some sort of matrix.
+We use physical model to to setup specific relationship between images and real world object.
+The pipeline system we built is not robust enough due to the complexity problems.
+We have constraints on light, camera distance, human skin color and head rotation angle range.
+
+Generally, we should first decide the eye movements types by calculating movement rates and duration of the movement.
+The movements are shown in table \ref{tab:eye_movements}
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{|l|l|l|l|l|}
+        \hline
+         Eye Movement & Movement rate & Duration  & Application \\\hline
+         Fixation & < 15-100 deg/ms & 180-275 ms  & Browsing information\\\hline
+         Saccade & 100-700 deg/sec & 20-200 ms &  Visual Search\\ \hline
+         Smooth pursuit & <100 deg/sec & 100 ms &  Gazed based steering \\ \hline
+         Scan path & -- & -- & Assessing user behavior \\ \hline
+         Gaze duration& -- & -- &  Item Selection \\ \hline
+         Blink & 12-15 per min & 300 ms &  Eye liveliness detection \\ \hline
+         Pupil size change & 4-7 mm/sec & 140 ms & Assessing cognitive\\ \hline
+    \end{tabular}
+    \caption{Classification of Eye Movements}
+    \label{tab:eye_movements}
+\end{table}
+Different types of movements can be coded into different models.
+Using the model pipeline to fine tune until arrive the acceptable accuracy.
+
+
+\subsection{Traditional Pipeline Algorithm}
+\begin{center}\label{pipeline}
+    \smartdiagramset{back arrow disabled=true}
+    \smartdiagram[flow diagram:horizontal]{Position user in front of eye tracker, Estimate head pose in angles, Do user's ye calibration, Run head-based characterization, Save eye-tracking data, calculate gaze direction}
+\end{center}
+The pipeline algorithm is shown in \ref{pipeline}.
+The first step needs devices eye tracker and camera.
+The tracker will generate camera calibration matrix.
+And the camera will record a video.
+After that, use the head pose estimation model to get head pose angles.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|c|c}
+         User parameters & Device parameters & Environment parameters \\ \hline
+         Head pose & Number of cameras & Platform movement \\ 
+         Eye occlusion & Camera resolution & Illumination changes \\
+         Eye limitations & -- & Screen display size and resolution \\
+         Hand pose/vibration & -- & User distance from tracker \\ 
+    \end{tabular}
+    \caption{Parameters of evaluate eye tracking systems}
+    \label{tab:parameters}
+\end{table}
+
+The parameters in the table\ref{tab:parameters} are all needed for traditional algorithm.
+Because of the large amount of parameters, the whole system is unstable.
+The algorithm is specific to specific person.
+Once you change the light or move yourself too much, the algorithm will likely to fail down.
+
 \section{Deep learning based methods}
+Deep learning has become more and more popular during these days.
+Since 2012, the deep neural networks architectures have been popular since 2012.
+The first neural network champion of 
 \subsection{Gaze Estimation in the Wild}
 \subsection{Eye Tracking for Everyone}
 
