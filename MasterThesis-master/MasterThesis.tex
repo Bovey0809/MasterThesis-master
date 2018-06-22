@@ -32,6 +32,8 @@
 \usepackage[toc,page,title,titletoc,header]{appendix}
 \usepackage{smartdiagram}
 \usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{graphicx}
 
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
@@ -371,12 +373,53 @@ The input is still under a lot of constraints, which in the ideal situation shou
 In the paper <Eye Tracking for Everyone>\cite{krafka2016eye}, the structure is more useful to build an end-to-end algorithm.
 The main idea of the paper is to eliminate camera calibration process and homograph process.
 But the output of the algorithm is a different from paper \cite{zhang2015appearance}.
+\begin{figure}[b]
+    \centering
+    \includegraphics[width=15cm]{MasterThesis-master/images/eye_tracking_cnn.png}
+    \caption{The CNN structure used in paper <Eye tracking for everyone> \cite{krafka2016eye}.The input is one image but divided in different four fields. The face grid in the image is used to emphasize face position in the image.}
+    \label{fig:eye_tracking_CNN}
+\end{figure}
+As shown in the Fig.\ref{fig:eye_tracking_CNN}, the input image should be cut into 3 different parts.
+The first two parts are right eye image and left eye images.
+These kind of settings can enlarge the eye's resolution as the input of the network.
+The face grid is one matrix of $25 \times 25$ pixels.
+It is used to emphasize face location on the input frame.
+Combine these four inputs together, the algorithm can generate points location on the screen.
+The short coming of the algorithm is obvious too.
+While training, you should use one specific person's data as input.
+And also, the eyes' and face images should be cut off from face landmark detection algorithm.
+Here they use dark net network \cite{hinton2015distilling} in their network in order to detect eyes.
+The face is also detected by dark net network\cite{hinton2015distilling}.
 
 
 \subsection{Compared existing methods}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+So far for now, there are lots of algorithms aiming to deal with gaze recognition problems.
+Basically it can be divided into different categories based on their setup equipment and usages.
+The accuracy and tested condition are shown in table.\ref{gaze_estimation_alforithms_categories}.
 
+\begin{table}[h]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}|l|l|l|l|@{}}
+\toprule
+Method category & Setup & Accuracy & Tested condition \\ \midrule
+2D regression & Single camera, multiple LEDs with 2 face camera & 0.8 degree\cite{brolly2004implicit} & Limited head movements \\ \midrule
+3D model & 4 cameras 2 LEDs, mirros & 0.6 degree \cite{beymer2003eye}& Head pose compensated \\ \midrule
+Appearance based & 1 camera, NIR illuminator & 0.5 deg \cite{tan2002appearance}&  \\ \midrule
+ & webcam & Recognition rate 97\% \cite{wu2014gaze} &  \\ \midrule
+ & image database & Recognition rate 97\% \cite{george2016real}&  \\ \midrule
+Cross Ratio based & 4 IR LEDs, 1 camera & 0.3-0.4 deg without headmovement, 1-2 with head movement \cite{huang2014towards}& Head movement allowed \\ \midrule
+Shape based methods & 1 camera & 85\% \cite{wang2011driver}& None \\ \midrule
+ & image frames & 4.5 pixels \cite{reinders1997eye}& None \\ \bottomrule
+\end{tabular}%
+}
+\caption{Gaze estimation algorithms categories}
+\label{gaze_estimation_alforithms_categories}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Methodology} \label{methodology}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Network Structure} \label{network structure}
 \subsection{Pre-trained Model}
