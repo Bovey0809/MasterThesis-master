@@ -395,7 +395,7 @@ The face is also detected by dark net network\cite{hinton2015distilling}.
 \subsection{Compared existing methods}
 So far for now, there are lots of algorithms aiming to deal with gaze recognition problems.
 Basically it can be divided into different categories based on their setup equipment and usages.
-The accuracy and tested condition are shown in table.\ref{gaze_estimation_alforithms_categories}.
+The accuracy and tested condition are shown in table.\ref{tab:gaze_estimation_alforithms_categories}.
 
 \begin{table}[h]
 \centering
@@ -408,26 +408,122 @@ Method category & Setup & Accuracy & Tested condition \\ \midrule
 Appearance based & 1 camera, NIR illuminator & 0.5 deg \cite{tan2002appearance}&  \\ \midrule
  & webcam & Recognition rate 97\% \cite{wu2014gaze} &  \\ \midrule
  & image database & Recognition rate 97\% \cite{george2016real}&  \\ \midrule
-Cross Ratio based & 4 IR LEDs, 1 camera & 0.3-0.4 deg without headmovement, 1-2 with head movement \cite{huang2014towards}& Head movement allowed \\ \midrule
+Cross Ratio based & 4 IR LEDs, 1 camera & 0.3-0.4 deg without headmovement \cite{huang2014towards}& Head movement allowed \\ \midrule
 Shape based methods & 1 camera & 85\% \cite{wang2011driver}& None \\ \midrule
  & image frames & 4.5 pixels \cite{reinders1997eye}& None \\ \bottomrule
 \end{tabular}%
 }
 \caption{Gaze estimation algorithms categories}
-\label{gaze_estimation_alforithms_categories}
-\end{table}
+\label{tab:gaze_estimation_alforithms_categories}
+\end{table}  
+As the categories in  table\ref{tab:gaze_estimation_alforithms_categories}, it is easily to find that all the algorithm are testing in their own standard.
+The reason is that the equipment are so different from each algorithms and the circumstances are also different.
+Since all the details are different, we do not have a suitable testing cases for every algorithm.
+It is actually a problem in gaze estimation area.
+
+The main focus of our research is the appearance based eye gaze estimation algorithms\cite{zhang2015appearance}\cite{Sugano2014LearningbySynthesisFA}.
+These algorithm are also variant.
+Usually they should collect their own data set, like \cite{zhang2015appearance}, they collected data from web-cam of 15 persons using laptop.
+In paper \cite{krafka2016eye} they collect data from 1474 people, and totally get 2,445,504 images in their dataset.
+Besides the dataset, the input of these algorithms are different.
+And even the purpose, the purpose are mainly divided into two parts.
+One is the direction in three coordinate\cite{zhang2015appearance}, another is to predict the point on the screen\cite{krafka2016eye}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Methodology} \label{methodology}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Network Structure} \label{network structure}
-\subsection{Pre-trained Model}
-\subsection{Transfer Learning}
-\subsection{Attention Model}
+Our network is composed of three main part.
+The first part is the pre-trained model.
+And the second one is the attention mechanism model.
+The last part is for regression of gaze direction.
+The structure is simple and elegant.
 
-\section{Training Phase} \label{training phase}
+Our main idea is follow the instinct of human gaze seeing process.
+First, using feature extract structure to recognize features on the face.
+The features trained by the other recognition algorithms can be transferred to our network by using transfer learning technique described in Chapter \ref{cha: transfer learning}.
+So that the first part of the network can recognize the face landmarks like eyes.
+Then, in order to focus on the some important region or what we may consider as the interest region.
+We try to use attention mechanism as described in chapter \ref{cha: attention model}.
+The mechanism is a 1x1 kernel convolution network, it is used to extract previous pre-trained model's output to generate a 13x13 feature map.
+The feature map can be used to add weights to the original pre-trained output.
+After feature extraction and weight enhancement, we use two fully connective layer to regress the gaze direction.
+
+\begin{figure}[b]
+    \centering
+    \includegraphics[width=15cm]{MasterThesis-master/images/pre_trained.jpg}
+    \caption{Pre-trained model, similar to Alex net.}
+    \label{fig:pre_trained_model}
+\end{figure}
+
+\subsection{Transfer Learning}\label{cha: transfer learning}
+The lower layers in CNN algorithm structure are doing the similar things.
+To be more detailed as describe in \cite{noh2015learning}.
+It explains the common features of CNN, which the lower layers are extracting simple features like line, circle or rectangles.
+And due to this trait of CNN, it is possible to transfer a trained network to the other networks.
+The lower part of the CNN model is able to distinguish different objects even if your target objects are not included in their labels. 
+\begin{figure}
+    \centering
+    \includegraphics[width=15cm]{MasterThesis-master/images/deconv.png}
+    \caption{DeConvNet illustrates features extracted by CNN.}
+    \label{fig:deconv}
+\end{figure}
+
+As showing in Fig.\ref{fig:deconv}, the first layer is detecting simple pattern in images.
+And then when the layer becomes more deeper, the features become more complex.
+As the result, we can use the first few layers to extract features.
+Because basic features like lines or basic shapes are the same.
+
+\subsection{Pre-trained Model}
+Here is the pre-tranined model Fig.\ref{fig:pre_trained_model}.
+It is similar to Alexnet\cite{krizhevsky2012imagenet}, the Alex net model get a very high precision, error rate of 0.16422, in 2012  ImageNet Large Scale Visual Recognition Competition.
+Compared to the other competition winners, it occupies less space which means higher processing speed.
+In the pre-trained model Fig.\ref{fig:pre_trained_model}, the input image size is 448x448x3.
+After convolutional neural network it will output a 13x13x256 feature map, which means a 13 width and 13 height 256 depth wrights.
+As in the original paper, this algorithm is aiming to classify 10,000,000 labeled images depicting 10,000+ object categories\cite{ILSVRC15}.
+
+\subsection{Attention Model}\label{cha: attention model}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10cm]{MasterThesis-master/images/attension.jpg}
+    \caption{Attention model}
+    \label{fig:attention model}
+\end{figure}
+
+The output as from pre-trained model (Fig.\ref{fig:pre_trained_model}) is a feature map matrix U with shape of 13x13x256.
+The attention model's output is a matrix W with shape of 13x13x1.
+Using element wise multiplication equation \ref{eq: attention model}, output matrix V has the same shape of W.
+\begin{equation}\label{eq: attention model}
+U \odot W = V
+\end{equation}
+
+The attention model used conv 1x1 kernel with stride 1.
+And then use Relu as equation \ref{eq: attention model} to activate each layer's output.
+\begin{equation}\label{eq:relu}
+    f(x)= 
+\begin{cases}
+    x,& \text{if } x\geq 0\\
+    0,              & \text{otherwise}
+\end{cases}
+\end{equation}
+
+\subsection{Fully Connected Layer}\label{cha: fcn}
+After extracting features from pre-trained model (chapter \ref{cha: transfer learning}), use the output of the extracted feature as the input to attention model in chapter \ref{cha: attention model}.
+Calculate the matrix V (equation \ref{eq: attention model}), the V matrix is the preferred feature to represent the eye gaze.
+Thus, the last step is to do regression operation.
+This step is mainly to generate a appropriate label.
+We use two fully connected layers to do the regression work.
+\begin{figure}
+    \centering
+    \includegraphics[width=13cm]{MasterThesis-master/images/fcn.jpg}
+    \caption{Fully Connected Layers}
+    \label{fig:fcn}
+\end{figure}
+In order to get the appropriate shape, we transformed the V matrix from shape 13x13x256 to 43264x1.
+And then the reshaped matrix can be connected to fully connected layers and generate a 6 dimensional matrix represent points on the screen.
+
 \subsection{Formulation of the input}
+
 \subsection{Data Augment}
 \subsection{Loss Function}
 
