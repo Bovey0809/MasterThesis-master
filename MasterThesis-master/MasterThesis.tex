@@ -474,6 +474,7 @@ And then when the layer becomes more deeper, the features become more complex.
 As the result, we can use the first few layers to extract features.
 Because basic features like lines or basic shapes are the same.
 
+
 \subsection{Pre-trained Model}
 Here is the pre-tranined model Fig.\ref{fig:pre_trained_model}.
 It is similar to Alexnet\cite{krizhevsky2012imagenet}, the Alex net model get a very high precision, error rate of 0.16422, in 2012  ImageNet Large Scale Visual Recognition Competition.
@@ -515,34 +516,76 @@ This step is mainly to generate a appropriate label.
 We use two fully connected layers to do the regression work.
 \begin{figure}
     \centering
-    \includegraphics[width=13cm]{MasterThesis-master/images/fcn.jpg}
+    \includegraphics[width=10cm]{MasterThesis-master/images/fcn.jpg}
     \caption{Fully Connected Layers}
     \label{fig:fcn}
 \end{figure}
 In order to get the appropriate shape, we transformed the V matrix from shape 13x13x256 to 43264x1.
 And then the reshaped matrix can be connected to fully connected layers and generate a 6 dimensional matrix represent points on the screen.
 
-\subsection{Formulation of the input}
-
+\section{Training Phase}
 \subsection{Data Augment}
+We use a set of data augments methods to deal with different illumination.
+In order to re-size input image to the same size of 448x448, we use bi-linear interpolation.
+Because bi-linear interpolation algorithm is continuous, the visual effect is better than the other re-size algorithm like KNN\cite{han2013comparison}.
+And also the bi-linear interpolation is faster than bi-cubic interpolation algorithm.
+Therefore the bi-linear algorithm is a speed and clarity compromise.
+
+Another problem we should consider is the illumination.
+Focus on illumination we come up with two specific solution.
+One is brightness, and the other one is color.
+We use random brightness chosen method based on the equation \ref{brightness}.
+\begin{equation}\label{brightness}
+    j(x, y) = \alpha f(x, y) + \beta
+\end{equation}
+The $\alpha, \alpha \geq 0$ here represents the contrast of one image.
+We use the constant value.
+And $\beta$ is a randomly chosen value from -0.5 to 0.5.
+In equation \ref{brightness}, the f(x,y) represents one pixel value in the original input image.
+j(x,y) represent the output of a altered image pixel.
+
+For the color space, first we change the RGB color space to HSV by equation \ref{eq:hue}, and then randomly add a value to Hue axis.
+R, G, B are the three channels values in each pixel, $h_{RGB}$ is the converted hue value.
+
+With combing these two methods together, we can largely change the brightness and color of the original images. 
+\begin{equation}\label{eq:hue}
+    tan(h_{RGB}) = \frac{\sqrt{3}(G-B)}{2R-G-B}
+\end{equation}
+
 \subsection{Loss Function}
+Considering our output value, we try to use Mean Square Error as our loss function.
+For each image input x, our output $\hat{\theta}_m$ is a 6 dimension vector $\hat{\theta}_m\in R^{1\times 6}$.
+The ground truth is the same dimension vector $\theta$.
+The loss function can be written as equation\ref{eq:loss function}.
+\begin{equation}\label{eq:loss function}
+    MSE=\frac{1}{n}\sum_{i=1}^n (\hat{\theta}_i - \theta)^2
+\end{equation}
 
+% \section{Testing Phase} \label{testing phase}
+% During the test phase, we have two different kinds of tests.
+% One is for single person output.
+% And the other one is for multiple person output.
 
-\section{Testing Phase} \label{testing phase}
-\subsection{One Person Output}
-\subsection{Different Person Output}
-\subsection{Points Based Structure}
+% The reason why we choose two different testing phase is mostly based on the skewing data we get.
+% The dataset details will be explained in section\ref{sec: dataset}.
+
+% \subsection{Single Person Output}
+% As for the single person, we choose the specific person's images only as the input.
+
+% \subsection{Different Person Output}
+% \subsection{Points Based Structure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Experiments} \label{experiments}
-\section{Images in MPII}
+\section{Images in MPIIGaze}\label{sec: dataset}
+The dataset MPIIGaze is 
 \subsection{Sources}
 \subsection{Methods to Record}
-\section{Datasets Structure}
+\section{Dataset Structure}
 \section{Results Display}
 
 \chapter{Future Work}\label{future work}
-
+1. Change relu to sigmoid.
 \bibliographystyle{IEEEtran}
 \bibliography{LUOreference}
 \end{document}
