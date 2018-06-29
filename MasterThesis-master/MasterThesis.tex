@@ -556,36 +556,145 @@ With combing these two methods together, we can largely change the brightness an
 Considering our output value, we try to use Mean Square Error as our loss function.
 For each image input x, our output $\hat{\theta}_m$ is a 6 dimension vector $\hat{\theta}_m\in R^{1\times 6}$.
 The ground truth is the same dimension vector $\theta$.
-The loss function can be written as equation\ref{eq:loss function}.
+The loss function can be written as equation \ref{eq:loss function}.
 \begin{equation}\label{eq:loss function}
     MSE=\frac{1}{n}\sum_{i=1}^n (\hat{\theta}_i - \theta)^2
 \end{equation}
+% Besides MSE, absolute value can also be written in the paper.
+The training phase will calculate derivation of loss function.
 
-% \section{Testing Phase} \label{testing phase}
-% During the test phase, we have two different kinds of tests.
-% One is for single person output.
-% And the other one is for multiple person output.
+\section{Testing Phase} \label{testing phase}
+During the test phase, we have two different kinds of tests.
+One is for single person output.
+And the other one is for multiple person output.
+In the testing phase, we only need to input images and use forward inference procedure.
+The image calculated through pre-trained model and then the 
+The reason why we choose two different testing phase is mostly based on the skewing data we get.
+The dataset details will be explained in section\ref{sec: dataset}.
 
-% The reason why we choose two different testing phase is mostly based on the skewing data we get.
-% The dataset details will be explained in section\ref{sec: dataset}.
-
-% \subsection{Single Person Output}
-% As for the single person, we choose the specific person's images only as the input.
-
-% \subsection{Different Person Output}
-% \subsection{Points Based Structure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Experiments} \label{experiments}
 \section{Images in MPIIGaze}\label{sec: dataset}
-The dataset MPIIGaze is 
-\subsection{Sources}
-\subsection{Methods to Record}
+The dataset MPIIGaze contained 213,659 images collected from 15 laptop users over several months.
+It covers a realistic reliable variability in appearance and illumination and therefore represents a significant big amount of data.
+\begin{figure}
+    \centering
+    \includegraphics[width=15cm]{MasterThesis-master/images/head_images.jpg}
+    \caption{Sample images from MPIIGaze dataset showing the considerable variability in terms of place and time of recording , directional light and shadows.}
+    \label{fig:head images}
+\end{figure}
+The variety of the dataset can cover a vast range of illumination and usage situations.
+Thus the dataset provide enough data to get algorithm trained on it.
+
 \section{Dataset Structure}
+For every image input, the dataset has 25 dimensions as shown in table\ref{table: annotations}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+Dimension  & Explaination                                                     \\ \hline
+1          & Image file from path and name.                               \\ \hline
+2$\sim$3   & Gaze location on the screen coordinate in pixels.           \\ \hline
+4$\sim$15  & (x, y) position for the six facial landmarks.                \\ \hline
+16$\sim$21 & The estimated 3D head pose in the camera coordinate system. \\ \hline
+22$\sim$24 & Face center in the camera coordinate system.                  \\ \hline
+25         & Which eye is used for the evaluation subset.                \\ \hline
+\end{tabular}
+\caption{MPIIGaze Annotations}
+\label{table: annotations}
+\end{table}
+
+\section{Pre-trained model VGG VS AlexNet}
+% Calculate number of wrights 
+% Scale up eye region.
+VGG is also one famous image classification structure\cite{simonyan2014very}.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10cm]{MasterThesis-master/images/vgg16.png}
+    \caption{VGG16 Structure}
+    \label{fig:VGG16}
+\end{figure}
+The structure of VGG net has more parameters and occupy a more larger space.
+But for small objects like eyes, the VGG structure use the 3x3 conv operation.
+Contrast with AlexNet, which used a 11x11 conv operation, VGG has a receptive field smaller than AlexNet.
+A smaller receptive field means the more detailed regions can be detected.
+As the pupil is in the middle of the eyes.
+VGG can be more accurate in detecting the small pupil.
+But the shortcoming is also obvious.
+VGG has two times amount of weights than AlexNet, the testing speed is slower and need more computing power inside GPU.
+VGG has 138 million parameters compared  AlexNet with million.
+Thus we use these two pre-trained model and test it together to get results.
+
+% Batch size
+
+\section{Fine tuning model}
+% dropout
+% batch norm
+% learning rate
+Because our dataset contained 213,659 images of 15 persons, for every person, they have 14000 on average.
+The image's input is a size of 448x448.
+Because of the big amount of data, we need to avoid overfit at the beginning.
+Refering to the paper Hinton et.al 2012\cite{DBLP:journals/corr/abs-1207-0580}, we use dropout layer in the fully connected layers.
+The basic idea of dropout layer is that, during training phase, randomly dropout some nodes in the network based on equation.
+\begin{equation}\label{eq: dropout}
+\begin{array}{l}
+     r_{j}^{(l)} \sim Bernoulli(p)\\
+    \Tilde{y}^{(l)} = r^{(l)} \times y^{(l)} \\
+     z_i^{(l+1)} = w_i^{(l+1)}\Tilde{y}^(l) + b_i^{(l+1)}\\
+     y_i^{(l+1)} = f(z_i^{(l+1)})
+\end{array}
+\end{equation}
+The model of dropout will randomly choose 1 or 0 from Bernoulli distribution.
+After choose the value of one front layer and then multiply the 0, the node's output will be 0.
+We add dropout layer in the fully connected layer to avoid overfit during training.
+And for the large size of input image, we choose to use batch size of 8.
+The memory is not allowed for a more larger network to work.
+As for the learning rate, we use learning rate decay algorithm Adam\cite{kingma2014adam}.
+\begin{figure}
+    \centering
+    \includegraphics[width=15cm]{MasterThesis-master/images/learningrate.jpg}
+    \caption{Learning rate in 500000 rounds changing curve VS steps.}
+    \label{fig:learning rate}
+\end{figure}
+The Fig. \ref{fig:learning rate} shows the changing curve during 500000 steps.
+
+% training time cost
+Training the algorithm for 500000 rounds, we can decrease the loss to around 10.
+It takes arounf 8 days to train, the loss changing log is shown in Fig. \ref{fig:loss}.
+\begin{figure}
+    \centering
+    \includegraphics[width=15cm]{MasterThesis-master/images/loss.jpg}
+    \caption{Total loss changing curve VS steps}
+    \label{fig:loss}
+\end{figure}
+
+\section{Hyper Parameters}
+%batch size 
+% SGD
+Batch size is one important parameter here, it is mainly depends on the memory of the GPU.
+Here we use GPU 1080Ti with total memory 11172 MiB.
+
+\section{Accuracy Metrix}
+The accuracy is calculated by computing the degree difference between predicted vector and ground truth label.
+
+\begin{equation}\label{accuracy}
+\begin{split}
+    cos\theta & = \frac{\hat{\theta}\theta}{|\hat{\theta_i}||\theta|} \\
+        \theta      & = \begin{bmatrix} x_1 &x_2 &x_3 & x_4 &x_5 &x_6 \end{bmatrix}  \\
+        \hat{\theta} & = \begin{bmatrix} {x_1}' &{x_2}' &{x_3}' & {x_4}' &{x_5}' &{x_6}' \end{bmatrix} 
+\end{split}
+\end{equation}
+
+\section{Speed}
 \section{Results Display}
 
+
 \chapter{Future Work}\label{future work}
-1. Change relu to sigmoid.
+% Attention model Change relu to xsigmoid.
+% model distill
+% 
 \bibliographystyle{IEEEtran}
 \bibliography{LUOreference}
 \end{document}
