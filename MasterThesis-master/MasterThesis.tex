@@ -661,20 +661,27 @@ As for the learning rate, we use learning rate decay algorithm Adam\cite{kingma2
 The Fig. \ref{fig:learning rate} shows the changing curve during 500000 steps.
 
 % training time cost
-Training the algorithm for 500000 rounds, we can decrease the loss to around 10.
-It takes arounf 8 days to train, the loss changing log is shown in Fig. \ref{fig:loss}.
+Training the algorithm for 500,000 rounds, we can decrease the loss to around 10.
+It takes around 8 days to train, the loss changing log is shown in Fig. \ref{fig:loss}.
 \begin{figure}
     \centering
     \includegraphics[width=15cm]{MasterThesis-master/images/loss.jpg}
     \caption{Total loss changing curve VS steps}
     \label{fig:loss}
 \end{figure}
+The reason that the train time takes so long is because of the amount of data and the big size of input image.
+
 
 \section{Hyper Parameters}
 %batch size 
 % SGD
 Batch size is one important parameter here, it is mainly depends on the memory of the GPU.
 Here we use GPU 1080Ti with total memory 11172 MiB.
+Out batch size here is 8, which means 8 images for one batch.
+Besides that, we use SGD as our optimizer\cite{bottou2010large}.
+Because we have a large set of data set, the SGD algorithm is good at converging no matter how big the data set is.
+Thus when we consider the speed of the training procedure, we should use a faster optimizer like SGD instead of gradient descent.
+And SGD is also more stable to promise converge in the long steps.
 
 \section{Accuracy Metrix}
 The accuracy is calculated by computing the degree difference between predicted vector and ground truth label.
@@ -686,6 +693,9 @@ The accuracy is calculated by computing the degree difference between predicted 
         \hat{\theta} & = \begin{bmatrix} {x_1}' &{x_2}' &{x_3}' & {x_4}' &{x_5}' &{x_6}' \end{bmatrix} 
 \end{split}
 \end{equation}
+As we set the threshold of the distance on the direction, then we can get our accuracy table.
+% table one person two person VGG AlexNet
+
 
 \section{Speed}
 \section{Results Display}
