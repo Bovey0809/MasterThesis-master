@@ -483,6 +483,29 @@ In the pre-trained model Fig.\ref{fig:pre_trained_model}, the input image size i
 After convolutional neural network it will output a 13x13x256 feature map, which means a 13 width and 13 height 256 depth wrights.
 As in the original paper, this algorithm is aiming to classify 10,000,000 labeled images depicting 10,000+ object categories\cite{ILSVRC15}.
 
+\subsection{Pre-trained model VGG VS AlexNet}
+% Calculate number of wrights 
+% Scale up eye region.
+VGG is also one famous image classification structure\cite{simonyan2014very}.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10cm]{MasterThesis-master/images/vgg16.png}
+    \caption{VGG16 Structure}
+    \label{fig:VGG16}
+\end{figure}
+The structure of VGG net has more parameters and occupy a more larger space.
+But for small objects like eyes, the VGG structure use the 3x3 conv operation.
+Contrast with AlexNet, which used a 11x11 conv operation, VGG has a receptive field smaller than AlexNet.
+A smaller receptive field means the more detailed regions can be detected.
+As the pupil is in the middle of the eyes.
+VGG can be more accurate in detecting the small pupil.
+But the shortcoming is also obvious.
+VGG has two times amount of weights than AlexNet, the testing speed is slower and need more computing power inside GPU.
+VGG has 138 million parameters compared  AlexNet with million.
+Thus we use these two pre-trained model and test it together to get results.
+
+% Batch size
+
 \subsection{Attention Model}\label{cha: attention model}
 \begin{figure}[h]
     \centering
@@ -606,28 +629,6 @@ Dimension  & Explaination                                                     \\
 \label{table: annotations}
 \end{table}
 
-\section{Pre-trained model VGG VS AlexNet}
-% Calculate number of wrights 
-% Scale up eye region.
-VGG is also one famous image classification structure\cite{simonyan2014very}.
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=10cm]{MasterThesis-master/images/vgg16.png}
-    \caption{VGG16 Structure}
-    \label{fig:VGG16}
-\end{figure}
-The structure of VGG net has more parameters and occupy a more larger space.
-But for small objects like eyes, the VGG structure use the 3x3 conv operation.
-Contrast with AlexNet, which used a 11x11 conv operation, VGG has a receptive field smaller than AlexNet.
-A smaller receptive field means the more detailed regions can be detected.
-As the pupil is in the middle of the eyes.
-VGG can be more accurate in detecting the small pupil.
-But the shortcoming is also obvious.
-VGG has two times amount of weights than AlexNet, the testing speed is slower and need more computing power inside GPU.
-VGG has 138 million parameters compared  AlexNet with million.
-Thus we use these two pre-trained model and test it together to get results.
-
-% Batch size
 
 \section{Fine tuning model}
 % dropout
@@ -683,28 +684,58 @@ Because we have a large set of data set, the SGD algorithm is good at converging
 Thus when we consider the speed of the training procedure, we should use a faster optimizer like SGD instead of gradient descent.
 And SGD is also more stable to promise converge in the long steps.
 
-\section{Accuracy Metrix}
+
+% \section{Speed}
+% We test inference speed of the network.
+
+\section{Results Display}
+\subsection{Accuracy Metrix}
 The accuracy is calculated by computing the degree difference between predicted vector and ground truth label.
 
 \begin{equation}\label{accuracy}
 \begin{split}
-    cos\theta & = \frac{\hat{\theta}\theta}{|\hat{\theta_i}||\theta|} \\
-        \theta      & = \begin{bmatrix} x_1 &x_2 &x_3 & x_4 &x_5 &x_6 \end{bmatrix}  \\
-        \hat{\theta} & = \begin{bmatrix} {x_1}' &{x_2}' &{x_3}' & {x_4}' &{x_5}' &{x_6}' \end{bmatrix} 
+    cos\theta        & = \frac{\hat{x}x}{|\hat{x_i}||x|} \\
+    \boldsymbol{x}   & = \begin{bmatrix} x_1 &x_2 &x_3 & x_4 &x_5 &x_6 \end{bmatrix}  \\
+    \hat{\boldsymbol{x}} & = \begin{bmatrix} {x_1}' &{x_2}' &{x_3}' & {x_4}' &{x_5}' &{x_6}' \end{bmatrix} 
 \end{split}
 \end{equation}
-As we set the threshold of the distance on the direction, then we can get our accuracy table.
+Calculate average distance error through the whole test set.
+The we can get average degree error.
+Compare the average degree error between every different sets.
 % table one person two person VGG AlexNet
+For different pre-trained model, we get the accuracy table for both single person and multi person.
+\begin{table}
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+Accuracy & single person & multi person \\ \hline
+AlexNet & 6.2 & 5.5 \\ \hline
+Vgg16 & 4.8 & 6.5 \\ \hline
+iTracker & \textbackslash{} & 5.6 \\ \hline
+\end{tabular}
+\caption{Compared different model's average degree error.}
+\label{my-label}
+\end{table}
+Compared with iTracker, which only has the accuracy of multi-person, the algorithm is better when testing multi-person's gaze direction.
 
+\subsection{Single person gaze estimation}
+As for the 15 persons in the dataset, we have a average degree error of 4.8.
 
-\section{Speed}
-\section{Results Display}
+\subsection{Multi-person gaze estimation}
 
 
 \chapter{Future Work}\label{future work}
 % Attention model Change relu to xsigmoid.
 % model distill
-% 
+There are still more models which we can try in the future.
+For the attention model, there are more archetecture to be tested.
+We can use fully pyramid network\cite{lin2017feature}.
+And there are other kinds of dataset can be tested in thefuture.
+It is good at detecting small object but also more complicated.
+For the big network size the model distill technique can be tested\cite{hinton2015distilling}.
+
+
+
 \bibliographystyle{IEEEtran}
 \bibliography{LUOreference}
 \end{document}
